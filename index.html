@@ -22,9 +22,21 @@
 		.users-list div {
 			cursor: pointer;
 		}
+
+		.img-list {
+			display: flex;
+			flex-direction: column;
+			gap: 20px;
+		}
+
+		.img-list img {
+			width: 170px;
+			border-radius: 10px;
+		}
 	</style>
 	<body>
 		<ul id="users-list" class="users-list"></ul>
+		<ul id="img-list" class="img-list"></ul>
 	</body>
 	<script>
 		fetch('https://jsonplaceholder.typicode.com/users')
@@ -39,6 +51,7 @@
 			listItem.textContent = user.name;
 			let cross = document.createElement('div');
 			cross.textContent = '❌';
+
 			cross.addEventListener('click', () => {
 				listItem.parentNode.removeChild(listItem);
 				users = users.filter((u) => u.id !== user.id);
@@ -47,5 +60,22 @@
 			listItem.appendChild(cross);
 			usersList.appendChild(listItem);
 		});
+		// Необязательная задача про собачек
+		let imgList = document.getElementById('img-list');
+		let counter = 0;
+		function dogImages() {
+			fetch('https://dog.ceo/api/breeds/image/random')
+				.then((response) => response.json())
+				.then((data) => {
+					if (counter < 10) {
+						const img = document.createElement('img');
+						img.src = data.message;
+						imgList.appendChild(img);
+						counter += 1;
+					}
+				})
+				.catch((error) => console.error('Error:', error));
+		}
+		setInterval(dogImages, 3000);
 	</script>
 </html>
