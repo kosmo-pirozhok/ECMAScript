@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Document</title>
+	</head>
+	<style>
+		.users-list {
+			font-size: 20px;
+
+			display: flex;
+			flex-direction: column;
+			gap: 20px;
+		}
+		.users-list li {
+			display: flex;
+			align-items: center;
+			gap: 10px;
+		}
+
+		.users-list div {
+			cursor: pointer;
+		}
+	</style>
+	<body>
+		<ul id="users-list" class="users-list"></ul>
+	</body>
+	<script>
+		fetch('https://jsonplaceholder.typicode.com/users')
+			.then((response) => response.json())
+			.then((users) => {
+				localStorage.setItem('users', JSON.stringify(users));
+			});
+		let users = JSON.parse(localStorage.getItem('users'));
+		let usersList = document.getElementById('users-list');
+		users.forEach((user) => {
+			let listItem = document.createElement('li');
+			listItem.textContent = user.name;
+			let cross = document.createElement('div');
+			cross.textContent = '❌';
+			cross.addEventListener('click', () => {
+				listItem.parentNode.removeChild(listItem);
+				users = users.filter((u) => u.id !== user.id);
+				localStorage.setItem('users', JSON.stringify(users));
+			});
+			listItem.appendChild(cross);
+			usersList.appendChild(listItem);
+		});
+	</script>
+</html>
